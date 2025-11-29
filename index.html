@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MiniOS Tablet</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #fafafa;
+    color: #222;
+    text-align: center;
+  }
+
+  header {
+    background-color: #2b2b2b;
+    color: #fff;
+    padding: 20px 0;
+    font-size: 26px;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+
+  .datetime {
+    margin-top: 8px;
+    font-size: 18px;
+    color: #555;
+  }
+
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 20px;
+    padding: 20px;
+  }
+
+  .tile {
+    background: linear-gradient(145deg, #e0e0e0, #f8f8f8);
+    box-shadow: 5px 5px 10px #d1d1d1, -5px -5px 10px #ffffff;
+    padding: 30px 10px;
+    border-radius: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    color: #222;
+    transition: all 0.2s ease;
+  }
+
+  .tile:hover {
+    transform: translateY(-3px);
+    box-shadow: 3px 3px 6px #c7c7c7, -3px -3px 6px #ffffff;
+  }
+
+  .widgets {
+    margin: 20px;
+    padding: 15px;
+    border-top: 2px solid #ccc;
+    font-size: 16px;
+    background-color: #f0f0f0;
+    border-radius: 15px;
+    text-align: left;
+  }
+
+  footer {
+    padding: 15px;
+    font-size: 14px;
+    color: #555;
+    border-top: 1px solid #ccc;
+  }
+
+  textarea {
+    width: 95%;
+    height: 80px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    padding: 5px;
+    font-size: 14px;
+  }
+
+  button {
+    margin-top: 5px;
+    padding: 5px 10px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+  }
+</style>
+</head>
+
+<body>
+
+<header>MiniOS Tablet</header>
+<div class="datetime" id="datetime"></div>
+
+<div class="tiles">
+  <a class="tile" href="https://chatgpt.com" target="_blank">AI</a>
+  <a class="tile" href="#" onclick="openNotes()">Notes</a>
+  <a class="tile" href="#" onclick="openWeather()">Weather</a>
+  <a class="tile" href="#" onclick="openCalendar()">Calendar</a>
+  <a class="tile" href="https://open.spotify.com" target="_blank">Music</a>
+  <a class="tile" href="#" onclick="openSettings()">Settings</a>
+</div>
+
+<div class="widgets" id="widgets">
+  <div id="notesWidget"><strong>Notes:</strong><br><textarea id="notesArea"></textarea><br><button onclick="saveNote()">Save Note</button></div>
+  <div id="weatherWidget"><strong>Weather:</strong> Loading...</div>
+  <div id="calendarWidget"><strong>Calendar:</strong> No events today</div>
+  <div id="settingsWidget" style="display:none;">
+    <strong>Settings:</strong><br>
+    <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
+  </div>
+</div>
+
+<footer>MiniOS for Kindle 8 – e-ink friendl by tomykSK ©y</footer>
+
+<script>
+// --- Date & Time ---
+function updateDateTime() {
+    const now = new Date();
+    const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+    const dateStr = now.toLocaleDateString('en-US', options);
+    const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    document.getElementById('datetime').innerText = `${dateStr} | ${timeStr}`;
+}
+setInterval(updateDateTime, 1000);
+updateDateTime();
+
+// --- Notes ---
+function openNotes() {
+  document.getElementById('notesWidget').style.display = 'block';
+}
+function saveNote() {
+  const note = document.getElementById('notesArea').value;
+  alert("Note saved:\n" + note);
+}
+
+// --- Weather (OpenWeatherMap API example) ---
+const WEATHER_API_KEY = 'YOUR_OPENWEATHERMAP_API_KEY'; // vlož svoj API key
+function openWeather() {
+  document.getElementById('weatherWidget').style.display = 'block';
+  if (WEATHER_API_KEY === 'YOUR_OPENWEATHERMAP_API_KEY') {
+    document.getElementById('weatherWidget').innerHTML = '<strong>Weather:</strong> Sunny 25°C';
+    return;
+  }
+  fetch(`https://api.openweathermap.org/data/2.5/weather?q=London&units=metric&appid=${WEATHER_API_KEY}`)
+  .then(response => response.json())
+  .then(data => {
+    const temp = data.main.temp;
+    const desc = data.weather[0].description;
+    document.getElementById('weatherWidget').innerHTML = `<strong>Weather:</strong> ${desc}, ${temp}°C`;
+  })
+  .catch(err => {
+    document.getElementById('weatherWidget').innerHTML = '<strong>Weather:</strong> Error fetching';
+  });
+}
+
+// --- Calendar ---
+function openCalendar() {
+  document.getElementById('calendarWidget').style.display = 'block';
+  alert("Calendar: No events today");
+}
+
+// --- Settings ---
+function openSettings() {
+  const s = document.getElementById('settingsWidget');
+  s.style.display = (s.style.display === 'none') ? 'block' : 'none';
+}
+function toggleDarkMode() {
+  document.body.style.backgroundColor = (document.body.style.backgroundColor === 'black') ? '#fafafa' : 'black';
+  document.body.style.color = (document.body.style.color === 'black') ? '#222' : 'white';
+}
+
+</script>
+
+</body>
+</html>
