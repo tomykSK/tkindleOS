@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MiniOS Tablet</title>
+<style>
+  body {
+    margin: 0;
+    font-family: sans-serif;
+    background-color: white;
+    color: black;
+    text-align: center;
+  }
+
+  header {
+    background-color: #333;
+    color: white;
+    padding: 15px 0;
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .datetime {
+    margin-top: 10px;
+    font-size: 18px;
+  }
+
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 15px;
+    padding: 20px;
+  }
+
+  .tile {
+    background-color: #eee;
+    padding: 30px 10px;
+    border-radius: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+    transition: background 0.2s;
+  }
+
+  .tile:hover {
+    background-color: #ddd;
+  }
+
+  .widgets {
+    margin: 20px;
+    padding: 10px;
+    border-top: 2px solid #ccc;
+    font-size: 16px;
+  }
+
+  footer {
+    padding: 15px;
+    font-size: 14px;
+    color: #555;
+    border-top: 1px solid #ccc;
+  }
+</style>
+</head>
+
+<body>
+
+<header>MiniOS Tablet</header>
+<div class="datetime" id="datetime"></div>
+
+<div class="tiles">
+  <a class="tile" href="https://chat.openai.com" target="_blank">ChatGPT</a>
+  <a class="tile" href="#" onclick="openNotes()">Notes</a>
+  <a class="tile" href="#" onclick="openWeather()">Weather</a>
+  <a class="tile" href="#" onclick="openCalendar()">Calendar</a>
+  <a class="tile" href="#" onclick="alert('Music');">Music</a>
+  <a class="tile" href="#" onclick="alert('Settings');">Settings</a>
+</div>
+
+<div class="widgets" id="widgets">
+  <div id="weatherWidget">Weather: Sunny 25°C</div>
+  <div id="notesWidget">Notes: Welcome to MiniOS!</div>
+  <div id="calendarWidget">Calendar: No events today</div>
+</div>
+
+<footer>MiniOS for Kindle 8 – e-ink friendly</footer>
+
+<script>
+// Update time and date
+function updateDateTime() {
+    const now = new Date();
+    const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+    const dateStr = now.toLocaleDateString('en-US', options);
+    const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    document.getElementById('datetime').innerText = `${dateStr} | ${timeStr}`;
+}
+setInterval(updateDateTime, 1000);
+updateDateTime();
+
+// Widget functions
+function openNotes() {
+    const note = prompt("Enter your note:", "");
+    if (note) {
+        document.getElementById('notesWidget').innerText = "Notes: " + note;
+    }
+}
+
+function openWeather() {
+    alert("Weather widget: Sunny 25°C");
+}
+
+function openCalendar() {
+    alert("Calendar: No events today");
+}
+</script>
+
+</body>
+</html>
